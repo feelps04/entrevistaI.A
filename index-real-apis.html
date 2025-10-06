@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Assistant para Entrevistas - APIs Reais</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> IA Assistant para Entrevistas</h1>
+                <div class="status-indicator">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Aguardando...</span>
+                </div>
+                <div class="api-status">
+                    <span class="api-indicator" id="googleApiStatus">
+                        <i class="fas fa-microphone"></i> Google Speech
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Setup Panel -->
+            <div class="setup-panel" id="setupPanel">
+                <div class="card">
+                    <h2><i class="fas fa-cog"></i> Configuração da Entrevista</h2>
+                    
+                    <!-- API Status Check -->
+                    <div class="api-check-section">
+                        <h3>Status das APIs</h3>
+                        <div class="api-status-grid">
+                            <div class="api-status-item" id="googleSpeechStatus">
+                                <i class="fas fa-microphone"></i>
+                                <span>Google Speech</span>
+                                <span class="status-badge checking">Verificando...</span>
+                            </div>
+                            <div class="api-status-item" id="aiAnalysisStatus">
+                                <i class="fas fa-brain"></i>
+                                <span>Análise IA</span>
+                                <span class="status-badge ready">Simulador OK</span>
+                            </div>
+                        </div>
+                        <button class="btn-secondary" onclick="checkAPIs()">
+                            <i class="fas fa-sync"></i> Verificar APIs
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="candidateName">Nome do Candidato:</label>
+                        <input type="text" id="candidateName" placeholder="Ex: João Silva" value="João Silva">
+                    </div>
+                    <div class="form-group">
+                        <label for="position">Posição:</label>
+                        <select id="position">
+                            <option value="desenvolvedor-senior">Desenvolvedor Senior</option>
+                            <option value="gerente-produto">Gerente de Produto</option>
+                            <option value="analista-dados">Analista de Dados</option>
+                            <option value="designer-ux">Designer UX</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="duration">Duração Estimada:</label>
+                        <select id="duration">
+                            <option value="30">30 minutos</option>
+                            <option value="45" selected>45 minutos</option>
+                            <option value="60">60 minutos</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Microphone Permission -->
+                    <div class="permission-check">
+                        <p><i class="fas fa-info-circle"></i> Este sistema precisa de acesso ao microfone para funcionar.</p>
+                        <button class="btn-secondary" onclick="requestMicrophonePermission()">
+                            <i class="fas fa-microphone"></i> Testar Microfone
+                        </button>
+                    </div>
+
+                    <button class="btn-primary" onclick="startRealInterview()" id="startButton" disabled>
+                        <i class="fas fa-play"></i> Iniciar Entrevista Real
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interview Panel -->
+            <div class="interview-panel" id="interviewPanel" style="display: none;">
+                <div class="interview-grid">
+                    <!-- Transcription Area -->
+                    <div class="transcription-area">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-microphone"></i> Transcrição ao Vivo (Google Speech)</h3>
+                                <div class="recording-indicator">
+                                    <span class="recording-dot"></span>
+                                    <span id="timer">00:00</span>
+                                    <span class="confidence-indicator" id="confidenceIndicator">Confiança: --</span>
+                                </div>
+                            </div>
+                            <div class="transcription-content" id="transcriptionContent">
+                                <div class="transcript-message">
+                                    <span class="speaker interviewer">Sistema:</span>
+                                    <span class="message">Aguardando permissão do microfone...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Suggestions -->
+                    <div class="suggestions-area">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-lightbulb"></i> Sugestões da IA</h3>
+                                <button class="btn-toggle" onclick="toggleSuggestions()">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            <div class="suggestions-content" id="suggestionsContent">
+                                <div class="suggestion-item waiting">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Aguardando conversa para gerar sugestões...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Tracker -->
+                    <div class="progress-area">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-chart-line"></i> Progresso da Entrevista</h3>
+                            </div>
+                            <div class="progress-content">
+                                <div class="topic-progress">
+                                    <div class="topic-item" data-topic="technical">
+                                        <span class="topic-name">Habilidades Técnicas</span>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 0%"></div>
+                                        </div>
+                                        <span class="progress-percent">0%</span>
+                                    </div>
+                                    <div class="topic-item" data-topic="communication">
+                                        <span class="topic-name">Comunicação</span>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 0%"></div>
+                                        </div>
+                                        <span class="progress-percent">0%</span>
+                                    </div>
+                                    <div class="topic-item" data-topic="problem-solving">
+                                        <span class="topic-name">Problem Solving</span>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 0%"></div>
+                                        </div>
+                                        <span class="progress-percent">0%</span>
+                                    </div>
+                                    <div class="topic-item" data-topic="leadership">
+                                        <span class="topic-name">Liderança</span>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 0%"></div>
+                                        </div>
+                                        <span class="progress-percent">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Control Panel -->
+                <div class="control-panel">
+                    <button class="btn-secondary" onclick="pauseRealInterview()">
+                        <i class="fas fa-pause"></i> Pausar
+                    </button>
+                    <button class="btn-success" onclick="finishRealInterview()">
+                        <i class="fas fa-stop"></i> Finalizar Entrevista
+                    </button>
+                </div>
+            </div>
+
+            <!-- Report Panel -->
+            <div class="report-panel" id="reportPanel" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Relatório de Avaliação</h2>
+                        <div class="report-actions">
+                            <button class="btn-secondary" onclick="exportReport()">
+                                <i class="fas fa-download"></i> Exportar PDF
+                            </button>
+                            <button class="btn-primary" onclick="startNewInterview()">
+                                <i class="fas fa-plus"></i> Nova Entrevista
+                            </button>
+                        </div>
+                    </div>
+                    <div class="report-content" id="reportContent">
+                        <!-- Report will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="real-apis/google-speech-integration.js"></script>
+    <script src="real-apis/web-speech-integration.js"></script>
+    <script src="script-real-apis.js"></script>
+</body>
+</html>

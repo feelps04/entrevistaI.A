@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Assistant para Entrevistas - Sistema Completo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .complete-badge {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .position-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .position-card {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .position-card:hover {
+            border-color: #667eea;
+            background: #f8fafc;
+        }
+        .position-card.selected {
+            border-color: #667eea;
+            background: #eef2ff;
+        }
+        .position-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        .position-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+        .position-score {
+            font-size: 0.875rem;
+            color: #059669;
+            font-weight: 500;
+        }
+        .save-section {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .candidates-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+        .candidate-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .candidate-info h4 {
+            margin: 0 0 0.5rem 0;
+            color: #1f2937;
+        }
+        .candidate-meta {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+        .candidate-score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .candidate-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn-small {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+        .filters-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        .comparison-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .comparison-panel.open {
+            right: 0;
+        }
+        .comparison-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .comparison-content {
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-brain"></i> IA Assistant para Entrevistas</h1>
+                <div class="complete-badge">
+                    <i class="fas fa-star"></i> SISTEMA COMPLETO
+                </div>
+                <div class="status-indicator">
+                    <span class="status-dot" id="statusDot"></span>
+                    <span id="statusText">Aguardando...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Navigation Tabs -->
+            <div class="tab-navigation" style="margin-bottom: 2rem;">
+                <button class="tab-btn active" onclick="showTab('interview')">
+                    <i class="fas fa-microphone"></i> Nova Entrevista
+                </button>
+                <button class="tab-btn" onclick="showTab('candidates')">
+                    <i class="fas fa-users"></i> Candidatos Salvos
+                </button>
+                <button class="tab-btn" onclick="showTab('comparison')">
+                    <i class="fas fa-balance-scale"></i> Comparação
+                </button>
+                <button class="tab-btn" onclick="showTab('analytics')">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </button>
+            </div>
+
+            <!-- Interview Tab -->
+            <div class="tab-content" id="interviewTab">
+                <!-- Setup Panel -->
+                <div class="setup-panel" id="setupPanel">
+                    <div class="card">
+                        <h2><i class="fas fa-cog"></i> Configuração da Entrevista</h2>
+                        
+                        <div class="form-group">
+                            <label for="candidateName">Nome do Candidato:</label>
+                            <input type="text" id="candidateName" placeholder="Ex: João Silva" value="">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Selecione a Posição:</label>
+                            <div class="position-grid" id="positionGrid">
+                                <!-- Positions will be loaded here -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duration">Duração Estimada:</label>
+                            <select id="duration">
+                                <option value="30">30 minutos</option>
+                                <option value="45" selected>45 minutos</option>
+                                <option value="60">60 minutos</option>
+                            </select>
+                        </div>
+
+                        <div class="save-section">
+                            <h4><i class="fas fa-save"></i> Salvamento Automático</h4>
+                            <p>Esta entrevista será salva automaticamente para comparação futura.</p>
+                            <label>
+                                <input type="checkbox" id="autoSave" checked> Salvar automaticamente
+                            </label>
+                        </div>
+
+                        <button class="btn-primary" onclick="startCompleteInterview()" id="startButton" disabled>
+                            <i class="fas fa-play"></i> Iniciar Entrevista
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interview Panel (same as demo) -->
+                <div class="interview-panel" id="interviewPanel" style="display: none;">
+                    <!-- Same content as demo version -->
+                    <div class="interview-grid">
+                        <!-- Transcription Area -->
+                        <div class="transcription-area">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-keyboard"></i> Transcrição da Entrevista</h3>
+                                    <div class="recording-indicator">
+                                        <span class="complete-badge" style="font-size: 0.75rem;">
+                                            <i class="fas fa-star"></i> COMPLETO
+                                        </span>
+                                        <span id="timer">00:00</span>
+                                    </div>
+                                </div>
+                                <div class="transcription-content" id="transcriptionContent">
+                                    <div class="transcript-message">
+                                        <span class="speaker system">Sistema:</span>
+                                        <span class="message">Entrevista iniciada. Digite as falas ou carregue conversa exemplo.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Text Input Area -->
+                            <div class="card" style="margin-top: 1rem;">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-edit"></i> Simular Conversa</h3>
+                                </div>
+                                <div class="text-input-area">
+                                    <div class="speaker-toggle">
+                                        <button class="speaker-btn active" id="interviewerBtn" onclick="setSpeaker('interviewer')">
+                                            <i class="fas fa-user-tie"></i> Entrevistador
+                                        </button>
+                                        <button class="speaker-btn" id="candidateBtn" onclick="setSpeaker('candidate')">
+                                            <i class="fas fa-user"></i> Candidato
+                                        </button>
+                                    </div>
+                                    <textarea id="speechInput" placeholder="Digite aqui o que seria falado na entrevista..."></textarea>
+                                    <button class="btn-primary" onclick="addSpeechText()" style="margin-top: 0.5rem;">
+                                        <i class="fas fa-plus"></i> Adicionar Fala
+                                    </button>
+                                    <button class="btn-secondary" onclick="loadSampleConversation()" style="margin-left: 0.5rem;">
+                                        <i class="fas fa-magic"></i> Carregar Conversa Exemplo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Suggestions -->
+                        <div class="suggestions-area">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-lightbulb"></i> Sugestões da IA</h3>
+                                    <button class="btn-toggle" onclick="toggleSuggestions()">
+                                        <i class="fas fa-eye" id="toggleIcon"></i>
+                                    </button>
+                                </div>
+                                <div class="suggestions-content" id="suggestionsContent">
+                                    <div class="suggestion-item waiting">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Aguardando conversa para gerar sugestões...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Progress Tracker -->
+                        <div class="progress-area">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-chart-line"></i> Progresso da Entrevista</h3>
+                                </div>
+                                <div class="progress-content">
+                                    <div class="topic-progress">
+                                        <div class="topic-item" data-topic="technical">
+                                            <span class="topic-name">Habilidades Técnicas</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 0%"></div>
+                                            </div>
+                                            <span class="progress-percent">0%</span>
+                                        </div>
+                                        <div class="topic-item" data-topic="communication">
+                                            <span class="topic-name">Comunicação</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 0%"></div>
+                                            </div>
+                                            <span class="progress-percent">0%</span>
+                                        </div>
+                                        <div class="topic-item" data-topic="problem-solving">
+                                            <span class="topic-name">Problem Solving</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 0%"></div>
+                                            </div>
+                                            <span class="progress-percent">0%</span>
+                                        </div>
+                                        <div class="topic-item" data-topic="leadership">
+                                            <span class="topic-name">Liderança</span>
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" style="width: 0%"></div>
+                                            </div>
+                                            <span class="progress-percent">0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Control Panel -->
+                    <div class="control-panel">
+                        <button class="btn-secondary" onclick="pauseCompleteInterview()">
+                            <i class="fas fa-pause"></i> Pausar
+                        </button>
+                        <button class="btn-success" onclick="finishCompleteInterview()">
+                            <i class="fas fa-stop"></i> Finalizar e Salvar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Panel -->
+                <div class="report-panel" id="reportPanel" style="display: none;">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-chart-bar"></i> Relatório de Avaliação</h2>
+                            <div class="report-actions">
+                                <button class="btn-success" onclick="startProcessUpdate()">
+                                    <i class="fas fa-sync-alt"></i> Start Process
+                                </button>
+                                <button class="btn-secondary" onclick="exportReport()">
+                                    <i class="fas fa-download"></i> Exportar
+                                </button>
+                                <button class="btn-primary" onclick="startNewInterview()">
+                                    <i class="fas fa-plus"></i> Nova Entrevista
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-content" id="reportContent">
+                            <!-- Score Overview -->
+                            <div class="score-overview">
+                                <div class="score-card main-score">
+                                    <div class="score-value">68</div>
+                                    <div class="score-label">Score Geral</div>
+                                </div>
+                                <div class="score-card">
+                                    <div class="score-value">1</div>
+                                    <div class="score-label">Minutos</div>
+                                </div>
+                                <div class="score-card">
+                                    <div class="score-value">17</div>
+                                    <div class="score-label">Interações</div>
+                                </div>
+                                <div class="score-card">
+                                    <div class="score-value">24</div>
+                                    <div class="score-label">Sugestões</div>
+                                </div>
+                            </div>
+
+                            <!-- Recommendation Section -->
+                            <div class="recommendation-section">
+                                <div class="recommendation-badge warning">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Recomendação: TALVEZ
+                                </div>
+                                <p class="recommendation-text">
+                                    Candidato apresenta potencial mas com algumas lacunas (68/100). 
+                                    Considere entrevista adicional ou plano de desenvolvimento.
+                                </p>
+                            </div>
+
+                            <!-- Competency Breakdown -->
+                            <div class="competency-section">
+                                <h3><i class="fas fa-chart-line"></i> Breakdown por Competência</h3>
+                                <div class="competency-list">
+                                    <div class="competency-item">
+                                        <div class="competency-header">
+                                            <span class="competency-name">Habilidades Técnicas</span>
+                                            <span class="competency-score excellent">100/100</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill excellent" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="competency-item">
+                                        <div class="competency-header">
+                                            <span class="competency-name">Comunicação</span>
+                                            <span class="competency-score poor">21/100</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill poor" style="width: 21%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="competency-item">
+                                        <div class="competency-header">
+                                            <span class="competency-name">Problem Solving</span>
+                                            <span class="competency-score poor">0/100</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill poor" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="competency-item">
+                                        <div class="competency-header">
+                                            <span class="competency-name">Liderança</span>
+                                            <span class="competency-score average">61/100</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill average" style="width: 61%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Key Insights -->
+                            <div class="insights-section">
+                                <h3><i class="fas fa-lightbulb"></i> Principais Insights</h3>
+                                <div class="insights-list">
+                                    <div class="insight-item positive">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Sólida base técnica com conhecimento avançado das tecnologias</span>
+                                    </div>
+                                    <div class="insight-item warning">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        <span>Pode se beneficiar de treinamento em comunicação técnica</span>
+                                    </div>
+                                    <div class="insight-item negative">
+                                        <i class="fas fa-times-circle"></i>
+                                        <span>Precisa desenvolver abordagem mais estruturada para resolução de problemas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Candidates Tab -->
+            <div class="tab-content" id="candidatesTab" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-users"></i> Candidatos Salvos</h2>
+                        <div class="report-actions">
+                            <button class="btn-secondary" onclick="exportAllData()">
+                                <i class="fas fa-download"></i> Exportar Dados
+                            </button>
+                            <button class="btn-secondary" onclick="clearAllData()">
+                                <i class="fas fa-trash"></i> Limpar Tudo
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Filters -->
+                    <div class="filters-section">
+                        <div class="form-group">
+                            <label for="filterArea">Área:</label>
+                            <select id="filterArea" onchange="applyFilters()">
+                                <option value="">Todas as áreas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterSeniority">Senioridade:</label>
+                            <select id="filterSeniority" onchange="applyFilters()">
+                                <option value="">Todas</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Pleno">Pleno</option>
+                                <option value="Senior">Senior</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="filterMinScore">Score Mínimo:</label>
+                            <input type="number" id="filterMinScore" min="0" max="100" onchange="applyFilters()">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterPosition">Posição:</label>
+                            <select id="filterPosition" onchange="applyFilters()">
+                                <option value="">Todas as posições</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="candidates-section" id="candidatesList">
+                        <!-- Candidates will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Tab -->
+            <div class="tab-content" id="comparisonTab" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-balance-scale"></i> Comparação de Candidatos</h2>
+                        <button class="btn-secondary" onclick="clearComparison()">
+                            <i class="fas fa-times"></i> Limpar Comparação
+                        </button>
+                    </div>
+                    <div id="comparisonContent">
+                        <!-- Comparison will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="analyticsTab" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Analytics e Estatísticas</h2>
+                    </div>
+                    <div id="analyticsContent">
+                        <!-- Analytics will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data/positions-config.js"></script>
+    <script src="data/local-storage.js"></script>
+    <script src="real-apis/free-speech-integration.js"></script>
+    <script src="script-complete.js"></script>
+</body>
+</html>

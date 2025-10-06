@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentAI Pro - Sistema Inteligente de Entrevistas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles-professional.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <div>
+                        <h1>TalentAI</h1>
+                        <span class="version">PRO v2.0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#" class="nav-item active" data-tab="dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="interview">
+                    <i class="fas fa-microphone"></i>
+                    <span>Nova Entrevista</span>
+                    <span class="badge">AI</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="candidates">
+                    <i class="fas fa-users"></i>
+                    <span>Candidatos</span>
+                    <span class="count">12</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="reports">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Relatórios</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Configurações</span>
+                </a>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=RH+Manager&background=ff6b35&color=fff" alt="User">
+                    <div>
+                        <p class="user-name">RH Manager</p>
+                        <p class="user-role">Administrador</p>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="breadcrumb">
+                        <span>Home</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="current">Dashboard</span>
+                    </div>
+                </div>
+                
+                <div class="top-bar-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Buscar candidatos...">
+                    </div>
+                    
+                    <button class="icon-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    
+                    <button class="icon-btn">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="content-area" id="dashboardContent">
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <div class="welcome-content">
+                        <h2>Bem-vindo de volta! 👋</h2>
+                        <p>Gerencie suas entrevistas com inteligência artificial de última geração</p>
+                    </div>
+                    <button class="btn-primary-gradient">
+                        <i class="fas fa-plus"></i>
+                        Nova Entrevista
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon orange-gradient">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Candidatos</h3>
+                            <p class="stat-value">247</p>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 12% este mês
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon blue-gradient">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Entrevistas</h3>
+                            <p class="stat-value">89</p>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 8% este mês
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon green-gradient">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Aprovados</h3>
+                            <p class="stat-value">34</p>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 23% este mês
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon purple-gradient">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>IA Insights</h3>
+                            <p class="stat-value">1.2k</p>
+                            <span class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i> 45% este mês
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Interviews -->
+                <div class="section-grid">
+                    <div class="card recent-interviews">
+                        <div class="card-header">
+                            <h3>Entrevistas Recentes</h3>
+                            <button class="btn-text">Ver todas</button>
+                        </div>
+                        <div class="interviews-list">
+                            <div class="interview-item">
+                                <div class="candidate-avatar">
+                                    <img src="https://ui-avatars.com/api/?name=João+Silva&background=ff6b35&color=fff" alt="João Silva">
+                                    <span class="status-indicator online"></span>
+                                </div>
+                                <div class="interview-info">
+                                    <h4>João Silva</h4>
+                                    <p>Desenvolvedor Senior</p>
+                                    <span class="interview-time">Há 2 horas</span>
+                                </div>
+                                <div class="interview-score">
+                                    <div class="score-circle high">
+                                        <span>85</span>
+                                    </div>
+                                    <span class="recommendation approved">Aprovado</span>
+                                </div>
+                            </div>
+                            
+                            <div class="interview-item">
+                                <div class="candidate-avatar">
+                                    <img src="https://ui-avatars.com/api/?name=Maria+Santos&background=ff6b35&color=fff" alt="Maria Santos">
+                                    <span class="status-indicator"></span>
+                                </div>
+                                <div class="interview-info">
+                                    <h4>Maria Santos</h4>
+                                    <p>Product Manager</p>
+                                    <span class="interview-time">Há 5 horas</span>
+                                </div>
+                                <div class="interview-score">
+                                    <div class="score-circle medium">
+                                        <span>68</span>
+                                    </div>
+                                    <span class="recommendation maybe">Em análise</span>
+                                </div>
+                            </div>
+                            
+                            <div class="interview-item">
+                                <div class="candidate-avatar">
+                                    <img src="https://ui-avatars.com/api/?name=Carlos+Souza&background=ff6b35&color=fff" alt="Carlos Souza">
+                                    <span class="status-indicator"></span>
+                                </div>
+                                <div class="interview-info">
+                                    <h4>Carlos Souza</h4>
+                                    <p>UX Designer</p>
+                                    <span class="interview-time">Ontem</span>
+                                </div>
+                                <div class="interview-score">
+                                    <div class="score-circle high">
+                                        <span>92</span>
+                                    </div>
+                                    <span class="recommendation approved">Aprovado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Insights -->
+                    <div class="card ai-insights">
+                        <div class="card-header">
+                            <h3>
+                                <i class="fas fa-lightbulb"></i>
+                                Insights da IA
+                            </h3>
+                            <span class="ai-badge">Powered by AI</span>
+                        </div>
+                        <div class="insights-content">
+                            <div class="insight-item">
+                                <i class="fas fa-chart-line text-orange"></i>
+                                <div>
+                                    <h4>Taxa de aprovação crescendo</h4>
+                                    <p>38% de aumento comparado ao mês anterior</p>
+                                </div>
+                            </div>
+                            <div class="insight-item">
+                                <i class="fas fa-clock text-blue"></i>
+                                <div>
+                                    <h4>Tempo médio de entrevista</h4>
+                                    <p>Reduzido para 32 minutos com IA</p>
+                                </div>
+                            </div>
+                            <div class="insight-item">
+                                <i class="fas fa-star text-yellow"></i>
+                                <div>
+                                    <h4>Melhores candidatos</h4>
+                                    <p>5 candidatos excepcionais esta semana</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview Content (Initially Hidden) -->
+            <div class="content-area" id="interviewContent" style="display: none;">
+                <!-- Interview Setup -->
+                <div class="interview-setup">
+                    <div class="setup-header">
+                        <h2>Configurar Nova Entrevista</h2>
+                        <p>Configure os parâmetros da entrevista assistida por IA</p>
+                    </div>
+                    
+                    <div class="setup-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-user"></i>
+                                    Nome do Candidato
+                                </label>
+                                <input type="text" placeholder="Ex: João Silva" class="form-input">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-briefcase"></i>
+                                    Posição
+                                </label>
+                                <select class="form-select">
+                                    <option>Desenvolvedor Senior</option>
+                                    <option>Product Manager</option>
+                                    <option>UX Designer</option>
+                                    <option>Data Scientist</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-clock"></i>
+                                    Duração Estimada
+                                </label>
+                                <select class="form-select">
+                                    <option>30 minutos</option>
+                                    <option selected>45 minutos</option>
+                                    <option>60 minutos</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>
+                                    <i class="fas fa-robot"></i>
+                                    Modo IA
+                                </label>
+                                <select class="form-select">
+                                    <option>Assistência Total</option>
+                                    <option>Sugestões Apenas</option>
+                                    <option>Análise Pós-Entrevista</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn-secondary">
+                                <i class="fas fa-save"></i>
+                                Salvar Rascunho
+                            </button>
+                            <button class="btn-primary-gradient" onclick="startInterviewPro()">
+                                <i class="fas fa-play"></i>
+                                Iniciar Entrevista
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Interview Panel (Hidden Initially) -->
+                <div class="live-interview" id="liveInterview" style="display: none;">
+                    <div class="interview-grid">
+                        <!-- Transcription Panel -->
+                        <div class="transcription-panel">
+                            <div class="panel-header">
+                                <h3>
+                                    <span class="recording-dot"></span>
+                                    Transcrição ao Vivo
+                                </h3>
+                                <span class="timer">00:00</span>
+                            </div>
+                            <div class="transcription-content">
+                                <div class="message interviewer">
+                                    <strong>Entrevistador:</strong>
+                                    <p>Olá! Vamos começar nossa conversa. Pode me contar sobre sua experiência?</p>
+                                </div>
+                                <div class="message candidate">
+                                    <strong>Candidato:</strong>
+                                    <p>Claro! Trabalho com desenvolvimento há 6 anos...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Assistant Panel -->
+                        <div class="ai-panel">
+                            <div class="panel-header">
+                                <h3>
+                                    <i class="fas fa-robot"></i>
+                                    Assistente IA
+                                </h3>
+                                <span class="ai-status">Analisando...</span>
+                            </div>
+                            <div class="ai-suggestions">
+                                <div class="suggestion-card high-priority">
+                                    <span class="priority-badge">Alta Prioridade</span>
+                                    <p>Pergunte sobre experiência com arquitetura de microsserviços</p>
+                                    <button class="use-suggestion">
+                                        <i class="fas fa-check"></i>
+                                        Usar
+                                    </button>
+                                </div>
+                                <div class="suggestion-card medium-priority">
+                                    <span class="priority-badge">Média</span>
+                                    <p>Explore mais sobre liderança de equipes</p>
+                                    <button class="use-suggestion">
+                                        <i class="fas fa-check"></i>
+                                        Usar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Tracking -->
+                    <div class="progress-tracking">
+                        <h3>Progresso da Avaliação</h3>
+                        <div class="skills-grid">
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span>Habilidades Técnicas</span>
+                                    <span class="skill-value">75%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span>Comunicação</span>
+                                    <span class="skill-value">60%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 60%;"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span>Problem Solving</span>
+                                    <span class="skill-value">80%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 80%;"></div>
+                                </div>
+                            </div>
+                            <div class="skill-item">
+                                <div class="skill-header">
+                                    <span>Liderança</span>
+                                    <span class="skill-value">45%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 45%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interview Controls -->
+                    <div class="interview-controls">
+                        <button class="btn-secondary">
+                            <i class="fas fa-pause"></i>
+                            Pausar
+                        </button>
+                        <button class="btn-primary-gradient" onclick="finishInterviewPro()">
+                            <i class="fas fa-stop"></i>
+                            Finalizar e Gerar Relatório
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Candidates Content (Hidden) -->
+            <div class="content-area" id="candidatesContent" style="display: none;">
+                <div class="candidates-header">
+                    <h2>Banco de Talentos</h2>
+                    <div class="filters">
+                        <button class="filter-btn active">Todos</button>
+                        <button class="filter-btn">Aprovados</button>
+                        <button class="filter-btn">Em Análise</button>
+                        <button class="filter-btn">Rejeitados</button>
+                    </div>
+                </div>
+
+                <div class="candidates-grid">
+                    <!-- Candidate cards will be generated here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Integração com APIs de IA -->
+    <script src="ai-integration.js"></script>
+    <script src="script-professional.js"></script>
+    
+    <!-- Configuração de IA na inicialização -->
+    <script>
+        // Configurar APIs com as chaves do projeto
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Verificar se as APIs estão configuradas
+            const apiStatus = await checkAPIConfiguration();
+            
+            // Atualizar indicadores de status
+            updateAPIStatusIndicators(apiStatus);
+            
+            // Iniciar reconhecimento de voz se disponível
+            if ('webkitSpeechRecognition' in window) {
+                initializeSpeechRecognition();
+            }
+        });
+        
+        // Verificar configuração das APIs
+        async function checkAPIConfiguration() {
+            const status = {
+                openai: false,
+                googleSpeech: false,
+                azure: false,
+                whisper: false
+            };
+            
+            // Verificar APIs disponíveis
+            try {
+                // OpenAI
+                if (localStorage.getItem('openai_api_key')) {
+                    status.openai = true;
+                }
+                
+                // Google Speech (Web Speech API)
+                if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                    status.googleSpeech = true;
+                }
+                
+                // Azure
+                if (localStorage.getItem('azure_speech_key')) {
+                    status.azure = true;
+                }
+                
+                // Whisper
+                if (localStorage.getItem('whisper_enabled')) {
+                    status.whisper = true;
+                }
+            } catch (error) {
+                console.error('Erro ao verificar APIs:', error);
+            }
+            
+            return status;
+        }
+        
+        // Atualizar indicadores de status das APIs
+        function updateAPIStatusIndicators(status) {
+            const statusContainer = document.createElement('div');
+            statusContainer.className = 'api-status-container';
+            statusContainer.innerHTML = `
+                <div class="api-status-grid">
+                    <div class="api-item ${status.openai ? 'active' : 'inactive'}">
+                        <i class="fas fa-brain"></i>
+                        <span>GPT-4</span>
+                    </div>
+                    <div class="api-item ${status.googleSpeech ? 'active' : 'inactive'}">
+                        <i class="fas fa-microphone"></i>
+                        <span>Speech</span>
+                    </div>
+                    <div class="api-item ${status.azure ? 'active' : 'inactive'}">
+                        <i class="fas fa-cloud"></i>
+                        <span>Azure</span>
+                    </div>
+                    <div class="api-item ${status.whisper ? 'active' : 'inactive'}">
+                        <i class="fas fa-headphones"></i>
+                        <span>Whisper</span>
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar ao dashboard
+            const dashboardContent = document.getElementById('dashboardContent');
+            if (dashboardContent) {
+                dashboardContent.insertBefore(statusContainer, dashboardContent.firstChild.nextSibling);
+            }
+        }
+        
+        // Inicializar reconhecimento de voz
+        function initializeSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            window.recognition = new SpeechRecognition();
+            
+            window.recognition.continuous = true;
+            window.recognition.interimResults = true;
+            window.recognition.lang = 'pt-BR';
+            
+            window.recognition.onresult = (event) => {
+                handleSpeechRecognitionResult(event);
+            };
+            
+            console.log('✅ Reconhecimento de voz ativado');
+        }
+        
+        // Processar resultado do reconhecimento de voz
+        function handleSpeechRecognitionResult(event) {
+            const last = event.results.length - 1;
+            const transcript = event.results[last][0].transcript;
+            
+            // Adicionar à transcrição
+            const transcriptionContent = document.querySelector('.transcription-content');
+            if (transcriptionContent && event.results[last].isFinal) {
+                const speaker = detectSpeaker(transcript);
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${speaker}`;
+                messageDiv.innerHTML = `
+                    <strong>${speaker === 'candidate' ? 'Candidato' : 'Entrevistador'}:</strong>
+                    <p>${transcript}</p>
+                `;
+                transcriptionContent.appendChild(messageDiv);
+                
+                // Analisar com IA
+                if (window.talentAI) {
+                    window.talentAI.analyzeWithGPT(transcript);
+                }
+            }
+        }
+        
+        // Detectar quem está falando
+        function detectSpeaker(transcript) {
+            const candidateKeywords = ['eu', 'minha', 'meu', 'trabalhei', 'fiz'];
+            const interviewerKeywords = ['você', 'sua', 'seu', 'qual', 'como'];
+            
+            const lowerText = transcript.toLowerCase();
+            const candidateScore = candidateKeywords.filter(k => lowerText.includes(k)).length;
+            const interviewerScore = interviewerKeywords.filter(k => lowerText.includes(k)).length;
+            
+            return candidateScore > interviewerScore ? 'candidate' : 'interviewer';
+        }
+        
+        // Função global para iniciar gravação
+        window.startAIRecording = async function() {
+            if (window.talentAI) {
+                await window.talentAI.startRecording();
+            }
+            if (window.recognition) {
+                window.recognition.start();
+            }
+        };
+        
+        // Função global para parar gravação
+        window.stopAIRecording = function() {
+            if (window.talentAI && window.talentAI.mediaRecorder) {
+                window.talentAI.mediaRecorder.stop();
+            }
+            if (window.recognition) {
+                window.recognition.stop();
+            }
+        };
+    </script>
+</body>
+</html>
